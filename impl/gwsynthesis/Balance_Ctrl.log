@@ -1,0 +1,76 @@
+GowinSynthesis start
+Running parser ...
+Analyzing Verilog file 'E:\ces\J280_v7.4_work\src\ang_deriv.v'
+Analyzing Verilog file 'E:\ces\J280_v7.4_work\src\angle_adc.v'
+Analyzing Verilog file 'E:\ces\J280_v7.4_work\src\clk_mgr.v'
+Analyzing Verilog file 'E:\ces\J280_v7.4_work\src\ctrl_fsm.v'
+Analyzing Verilog file 'E:\ces\J280_v7.4_work\src\ext_keys.v'
+Analyzing Verilog file 'E:\ces\J280_v7.4_work\src\key_filter.v'
+Analyzing Verilog file 'E:\ces\J280_v7.4_work\src\limit_prot.v'
+Analyzing Verilog file 'E:\ces\J280_v7.4_work\src\motor_drv.v'
+Analyzing Verilog file 'E:\ces\J280_v7.4_work\src\numfmt.v'
+Analyzing Verilog file 'E:\ces\J280_v7.4_work\src\oled_disp.v'
+Analyzing Verilog file 'E:\ces\J280_v7.4_work\src\oled_ssd1306.v'
+Analyzing Verilog file 'E:\ces\J280_v7.4_work\src\pendulum_top.v'
+Analyzing Verilog file 'E:\ces\J280_v7.4_work\src\pid_pipeline.v'
+Analyzing Verilog file 'E:\ces\J280_v7.4_work\src\pid_tuner.v'
+Analyzing Verilog file 'E:\ces\J280_v7.4_work\src\pos_cmd.v'
+Analyzing Verilog file 'E:\ces\J280_v7.4_work\src\pos_ctrl.v'
+Analyzing Verilog file 'E:\ces\J280_v7.4_work\src\pos_pd.v'
+Analyzing Verilog file 'E:\ces\J280_v7.4_work\src\qep_encoder.v'
+Analyzing Verilog file 'E:\ces\J280_v7.4_work\src\swing_pump.v'
+Analyzing Verilog file 'E:\ces\J280_v7.4_work\src\traj_ramp.v'
+Analyzing Verilog file 'E:\ces\J280_v7.4_work\src\traj_sine.v'
+Analyzing Verilog file 'E:\ces\J280_v7.4_work\src\uart_link.v'
+Analyzing Verilog file 'E:\ces\J280_v7.4_work\src\uart_rx.v'
+Analyzing Verilog file 'E:\ces\J280_v7.4_work\src\uart_tx.v'
+Compiling module 'pendulum_top'("E:\ces\J280_v7.4_work\src\pendulum_top.v":14)
+Compiling module 'key_filter'("E:\ces\J280_v7.4_work\src\key_filter.v":13)
+Compiling module 'clk_mgr'("E:\ces\J280_v7.4_work\src\clk_mgr.v":14)
+Compiling module 'angle_adc'("E:\ces\J280_v7.4_work\src\angle_adc.v":14)
+Compiling module 'qep_encoder'("E:\ces\J280_v7.4_work\src\qep_encoder.v":13)
+Compiling module 'ext_keys'("E:\ces\J280_v7.4_work\src\ext_keys.v":14)
+Compiling module 'key_filter(CNT_MAX=20'b11110100001001000000)'("E:\ces\J280_v7.4_work\src\key_filter.v":13)
+Compiling module 'pid_tuner(KP_TH_INIT=32'sd15507,KI_TH_INIT=32'sd256,KD_TH_INIT=32'sd2034,KP_X_INIT=32'sb11111111111111111111110010110011,KD_X_INIT=32'sb11111111111111111010101100011110)'("E:\ces\J280_v7.4_work\src\pid_tuner.v":28)
+Compiling module 'pos_cmd'("E:\ces\J280_v7.4_work\src\pos_cmd.v":14)
+Compiling module 'ang_deriv'("E:\ces\J280_v7.4_work\src\ang_deriv.v":14)
+Compiling module 'limit_prot'("E:\ces\J280_v7.4_work\src\limit_prot.v":13)
+Compiling module 'ctrl_fsm'("E:\ces\J280_v7.4_work\src\ctrl_fsm.v":14)
+Compiling module 'traj_sine'("E:\ces\J280_v7.4_work\src\traj_sine.v":14)
+Compiling module 'traj_ramp'("E:\ces\J280_v7.4_work\src\traj_ramp.v":14)
+Compiling module 'pos_ctrl'("E:\ces\J280_v7.4_work\src\pos_ctrl.v":13)
+Compiling module 'pos_pd(BIAS_MAX=16'sb0000000011111010,BIAS_RATE=16'sb0000000000000010)'("E:\ces\J280_v7.4_work\src\pos_pd.v":22)
+Compiling module 'pid_pipeline'("E:\ces\J280_v7.4_work\src\pid_pipeline.v":13)
+Compiling module 'swing_pump(KICK_DIR=1)'("E:\ces\J280_v7.4_work\src\swing_pump.v":13)
+Compiling module 'motor_drv'("E:\ces\J280_v7.4_work\src\motor_drv.v":13)
+Compiling module 'uart_link'("E:\ces\J280_v7.4_work\src\uart_link.v":12)
+Compiling module 'uart_tx(CLK_FREQ=26'b10111110101111000010000000,UART_BPS=21'b000000010010110000000)'("E:\ces\J280_v7.4_work\src\uart_tx.v":11)
+Compiling module 'uart_rx(CLK_FREQ=26'b10111110101111000010000000,UART_BPS=21'b000000010010110000000)'("E:\ces\J280_v7.4_work\src\uart_rx.v":13)
+Compiling module 'oled_disp'("E:\ces\J280_v7.4_work\src\oled_disp.v":43)
+Extracting RAM for identifier 'lbuf'("E:\ces\J280_v7.4_work\src\oled_disp.v":108)
+Compiling module 'numfmt'("E:\ces\J280_v7.4_work\src\numfmt.v":12)
+Compiling module 'oled_ssd1306'("E:\ces\J280_v7.4_work\src\oled_ssd1306.v":14)
+Extracting RAM for identifier 'fb'("E:\ces\J280_v7.4_work\src\oled_ssd1306.v":51)
+NOTE  (EX0101) : Current top module is "pendulum_top"
+[5%] Running netlist conversion ...
+WARN  (CV0020) : Input key_sw[3:2] is unused("E:\ces\J280_v7.4_work\src\pendulum_top.v":18)
+WARN  (CV0016) : Input enc_a is unused("E:\ces\J280_v7.4_work\src\pendulum_top.v":42)
+WARN  (CV0016) : Input enc_b is unused("E:\ces\J280_v7.4_work\src\pendulum_top.v":43)
+Running device independent optimization ...
+[10%] Optimizing Phase 0 completed
+[15%] Optimizing Phase 1 completed
+[25%] Optimizing Phase 2 completed
+Running inference ...
+[30%] Inferring Phase 0 completed
+[40%] Inferring Phase 1 completed
+[50%] Inferring Phase 2 completed
+[55%] Inferring Phase 3 completed
+Running technical mapping ...
+[60%] Tech-Mapping Phase 0 completed
+[65%] Tech-Mapping Phase 1 completed
+[75%] Tech-Mapping Phase 2 completed
+[80%] Tech-Mapping Phase 3 completed
+[90%] Tech-Mapping Phase 4 completed
+[95%] Generate netlist file "E:\ces\J280_v7.4_work\impl\gwsynthesis\Balance_Ctrl.vg" completed
+[100%] Generate report file "E:\ces\J280_v7.4_work\impl\gwsynthesis\Balance_Ctrl_syn.rpt.html" completed
+GowinSynthesis finish

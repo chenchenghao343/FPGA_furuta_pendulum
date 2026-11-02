@@ -1,0 +1,17 @@
+-d E:\ces\J280_v7.4_work\impl\gwsynthesis\Balance_Ctrl.vg
+-p GW2A-55C-PBGA484-8
+-pn GW2A-LV55PG484C8/I7
+-cst E:\ces\J280_v7.4_work\src\Balance_Ctrl.cst
+-cfg E:\ces\J280_v7.4_work\impl\pnr\device.cfg
+-sdc E:\ces\J280_v7.4_work\src\Balance_Ctrl.sdc
+-bit
+-tr
+-ph
+-timing
+-cst_error
+-place_option 0
+-route_option 0
+-clock_route_order 0
+-correct_hold 1
+-route_maxfan 23
+-global_freq 100.000

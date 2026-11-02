@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE gowin-synthesis-project>
+<Project>
+    <Version>beta</Version>
+    <Device id="GW2A-55C" package="PBGA484" speed="8" partNumber="GW2A-LV55PG484C8/I7"/>
+    <FileList>
+        <File path="E:\ces\J280_v7.4_work\src\ang_deriv.v" type="verilog"/>
+        <File path="E:\ces\J280_v7.4_work\src\angle_adc.v" type="verilog"/>
+        <File path="E:\ces\J280_v7.4_work\src\clk_mgr.v" type="verilog"/>
+        <File path="E:\ces\J280_v7.4_work\src\ctrl_fsm.v" type="verilog"/>
+        <File path="E:\ces\J280_v7.4_work\src\ext_keys.v" type="verilog"/>
+        <File path="E:\ces\J280_v7.4_work\src\key_filter.v" type="verilog"/>
+        <File path="E:\ces\J280_v7.4_work\src\limit_prot.v" type="verilog"/>
+        <File path="E:\ces\J280_v7.4_work\src\motor_drv.v" type="verilog"/>
+        <File path="E:\ces\J280_v7.4_work\src\numfmt.v" type="verilog"/>
+        <File path="E:\ces\J280_v7.4_work\src\oled_disp.v" type="verilog"/>
+        <File path="E:\ces\J280_v7.4_work\src\oled_ssd1306.v" type="verilog"/>
+        <File path="E:\ces\J280_v7.4_work\src\pendulum_top.v" type="verilog"/>
+        <File path="E:\ces\J280_v7.4_work\src\pid_pipeline.v" type="verilog"/>
+        <File path="E:\ces\J280_v7.4_work\src\pid_tuner.v" type="verilog"/>
+        <File path="E:\ces\J280_v7.4_work\src\pos_cmd.v" type="verilog"/>
+        <File path="E:\ces\J280_v7.4_work\src\pos_ctrl.v" type="verilog"/>
+        <File path="E:\ces\J280_v7.4_work\src\pos_pd.v" type="verilog"/>
+        <File path="E:\ces\J280_v7.4_work\src\qep_encoder.v" type="verilog"/>
+        <File path="E:\ces\J280_v7.4_work\src\swing_pump.v" type="verilog"/>
+        <File path="E:\ces\J280_v7.4_work\src\traj_ramp.v" type="verilog"/>
+        <File path="E:\ces\J280_v7.4_work\src\traj_sine.v" type="verilog"/>
+        <File path="E:\ces\J280_v7.4_work\src\uart_link.v" type="verilog"/>
+        <File path="E:\ces\J280_v7.4_work\src\uart_rx.v" type="verilog"/>
+        <File path="E:\ces\J280_v7.4_work\src\uart_tx.v" type="verilog"/>
+    </FileList>
+    <OptionList>
+        <Option type="disable_insert_pad" value="0"/>
+        <Option type="global_freq" value="100.000"/>
+        <Option type="looplimit" value="2000"/>
+        <Option type="output_file" value="E:\ces\J280_v7.4_work\impl\gwsynthesis\Balance_Ctrl.vg"/>
+        <Option type="print_all_synthesis_warning" value="0"/>
+        <Option type="ram_rw_check" value="0"/>
+        <Option type="vcc" value="1.0"/>
+        <Option type="verilog_language" value="verilog-2001"/>
+        <Option type="vhdl_language" value="vhdl-1993"/>
+    </OptionList>
+</Project>

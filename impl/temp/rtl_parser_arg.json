@@ -1,0 +1,109 @@
+{
+ "Device" : "GW2A-55C",
+ "Files" : [
+  {
+   "Path" : "E:/J280_v7.4_work/src/ang_deriv.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "E:/J280_v7.4_work/src/angle_adc.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "E:/J280_v7.4_work/src/clk_mgr.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "E:/J280_v7.4_work/src/ctrl_fsm.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "E:/J280_v7.4_work/src/ext_keys.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "E:/J280_v7.4_work/src/key_filter.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "E:/J280_v7.4_work/src/limit_prot.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "E:/J280_v7.4_work/src/motor_drv.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "E:/J280_v7.4_work/src/numfmt.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "E:/J280_v7.4_work/src/oled_disp.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "E:/J280_v7.4_work/src/oled_ssd1306.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "E:/J280_v7.4_work/src/pendulum_top.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "E:/J280_v7.4_work/src/pid_pipeline.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "E:/J280_v7.4_work/src/pid_tuner.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "E:/J280_v7.4_work/src/pos_cmd.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "E:/J280_v7.4_work/src/pos_ctrl.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "E:/J280_v7.4_work/src/pos_pd.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "E:/J280_v7.4_work/src/qep_encoder.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "E:/J280_v7.4_work/src/swing_pump.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "E:/J280_v7.4_work/src/traj_ramp.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "E:/J280_v7.4_work/src/traj_sine.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "E:/J280_v7.4_work/src/uart_link.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "E:/J280_v7.4_work/src/uart_rx.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "E:/J280_v7.4_work/src/uart_tx.v",
+   "Type" : "verilog"
+  }
+ ],
+ "IncludePath" : [
+
+ ],
+ "LoopLimit" : 2000,
+ "ResultFile" : "E:/J280_v7.4_work/impl/temp/rtl_parser.result",
+ "Top" : "",
+ "VerilogStd" : "verilog_2001",
+ "VhdlStd" : "vhdl_93"
+}

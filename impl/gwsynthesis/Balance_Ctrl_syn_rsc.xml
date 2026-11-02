@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module name="pendulum_top" Register="41" Alu="52" Lut="152" T_Register="1629(41)" T_Alu="585(52)" T_Lut="3811(152)" T_MULT18X18="1(0)" T_MULTALU36X18="5(0)" T_MULTADDALU18X18="2(0)" T_ALU54D="3(0)" T_Bsram="1(0)" T_Ssram="10(0)">
+ <SubModule name="u_rst_key" Register="23" Lut="42" T_Register="23(23)" T_Lut="42(42)"/>
+ <SubModule name="u_clk_mgr" Register="8" Lut="1" T_Register="8(8)" T_Lut="1(1)"/>
+ <SubModule name="u_key_run" Register="24" Lut="42" T_Register="24(24)" T_Lut="42(42)"/>
+ <SubModule name="u_key_sine" Register="24" Lut="42" T_Register="24(24)" T_Lut="42(42)"/>
+ <SubModule name="u_angle_adc" Register="45" Alu="14" Lut="117" T_Register="45(45)" T_Alu="14(14)" T_Lut="117(117)"/>
+ <SubModule name="u_qep_encoder" Register="38" Alu="32" Lut="17" T_Register="38(38)" T_Alu="32(32)" T_Lut="17(17)"/>
+ <SubModule name="u_ext_keys" Lut="1" T_Register="120(0)" T_Lut="213(1)">
+  <SubModule name="u_k_run" Register="24" Lut="42" T_Register="24(24)" T_Lut="42(42)"/>
+  <SubModule name="u_k_inc" Register="24" Lut="43" T_Register="24(24)" T_Lut="43(43)"/>
+  <SubModule name="u_k_dec" Register="24" Lut="43" T_Register="24(24)" T_Lut="43(43)"/>
+  <SubModule name="u_k_mode" Register="24" Lut="42" T_Register="24(24)" T_Lut="42(42)"/>
+  <SubModule name="u_k_send" Register="24" Lut="42" T_Register="24(24)" T_Lut="42(42)"/>
+ </SubModule>
+ <SubModule name="u_pid_tuner" Register="202" Alu="62" Lut="580" T_Register="202(202)" T_Alu="62(62)" T_Lut="580(580)"/>
+ <SubModule name="u_pos_cmd" Register="33" Alu="30" Lut="245" T_Register="33(33)" T_Alu="30(30)" T_Lut="245(245)"/>
+ <SubModule name="u_ang_deriv" Register="106" Alu="116" Lut="113" T_Register="106(106)" T_Alu="116(116)" T_Lut="113(113)"/>
+ <SubModule name="u_limit_prot" Register="8" Lut="25" T_Register="8(8)" T_Lut="25(25)"/>
+ <SubModule name="u_ctrl_fsm" Register="11" Lut="42" T_Register="11(11)" T_Lut="42(42)"/>
+ <SubModule name="u_traj_sine" Register="36" Lut="218" MULT18X18="1" T_Register="36(36)" T_Lut="218(218)" T_MULT18X18="1(1)"/>
+ <SubModule name="u_traj_ramp" Register="49" Alu="51" Lut="141" T_Register="49(49)" T_Alu="51(51)" T_Lut="141(141)"/>
+ <SubModule name="u_pos_ctrl" Register="16" Alu="51" Lut="46" T_Register="16(16)" T_Alu="51(51)" T_Lut="46(46)"/>
+ <SubModule name="u_pos_pd" Register="50" Alu="33" Lut="153" MULTALU36X18="2" T_Register="50(50)" T_Alu="33(33)" T_Lut="153(153)" T_MULTALU36X18="2(2)"/>
+ <SubModule name="u_pid_pipeline" Register="273" Alu="112" Lut="521" MULTALU36X18="3" ALU54D="3" T_Register="273(273)" T_Alu="112(112)" T_Lut="521(521)" T_MULTALU36X18="3(3)" T_ALU54D="3(3)"/>
+ <SubModule name="u_swing_pump" Register="16" Lut="45" T_Register="16(16)" T_Lut="45(45)"/>
+ <SubModule name="u_motor_drv" Register="29" Alu="13" Lut="55" T_Register="29(29)" T_Alu="13(13)" T_Lut="55(55)"/>
+ <SubModule name="u_uart_link" Register="202" Lut="174" T_Register="270(202)" T_Lut="257(174)">
+  <SubModule name="u_uart_tx" Register="28" Lut="41" T_Register="28(28)" T_Lut="41(41)"/>
+  <SubModule name="u_uart_rx" Register="40" Lut="42" T_Register="40(40)" T_Lut="42(42)"/>
+ </SubModule>
+ <SubModule name="u_oled_disp" Register="108" Lut="487" MULTADDALU18X18="2" Ssram="10" T_Register="159(108)" T_Alu="19(0)" T_Lut="610(487)" T_MULTADDALU18X18="2(2)" T_Ssram="10(10)">
+  <SubModule name="u_numfmt" Register="51" Alu="19" Lut="123" T_Register="51(51)" T_Alu="19(19)" T_Lut="123(123)"/>
+ </SubModule>
+ <SubModule name="u_oled" Register="48" Lut="134" Bsram="1" T_Register="48(48)" T_Lut="134(134)" T_Bsram="1(1)"/>
+</Module>

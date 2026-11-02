@@ -1,0 +1,69 @@
+# =============================================================================
+# 鏂囦欢鍚?: flow_nogao.tcl
+# 椤圭洰   : J280 鏃嬭浆鍊掔珛鎽?FPGA 鎺у埗绯荤粺
+# 鍣ㄤ欢   : GW2A-LV55PG484C8/I7  (GW2A-55C)
+# 宸ュ叿   : Gowin 浜戞簮杞欢 V1.9.12.x  ->  gw_sh.exe flow_nogao.tcl
+# -----------------------------------------------------------------------------
+# 鈽?涓?tools/flow.tcl 鐨勫敮涓€鍖哄埆锛?*涓嶅姞杞?GAO 閰嶇疆**锛堟敞閲婃帀 .rao锛夈€?#
+#   浠€涔堟椂鍊欑敤杩欎釜锛?#     路 鍙槸鎯崇儳鏉胯窇鎺у埗锛屼笉闇€瑕佸湪绾挎姄娉㈠舰
+#     路 GAO 鐗堜綅娴?18.6 MB锛屾櫘閫氱増 11.4 MB锛屼笅杞芥洿蹇?#     路 GAO 浼氬線璁捐閲屽 BSRAM锛?048 娣卞害鏃跺崰 18/140锛夛紝鏅€氱増鐪佷笅鏉?#
+#   鈽?娉ㄦ剰锛氱敤鏈剼鏈骇鍑虹殑浣嶆祦鍚嶅瓧鏄?impl\pnr\Balance_Ctrl.fs锛?#     鑰岀敤 tools\flow.tcl锛堝甫 GAO锛変骇鍑虹殑鏄?impl\pnr\ao_0.fs銆?#     涓よ€呫€愪笉鏄悓涓€涓笢瑗裤€戯紝鍒嬁娣枫€?#
+#   鐢ㄦ硶锛堝繀椤婚伒瀹堬紝鍚﹀垯浼氬洜涓枃璺緞澶辫触锛夛細
+#     1) 鎶婃暣涓伐绋嬬洰褰曟斁鍒?*绾嫳鏂囪矾寰?*涓嬶紝渚嬪 C:\J280_work\Balance_Ctrl
+#     2) 鍦?cmd 閲屾墽琛岋細
+#          set HOME=C:\J280_work
+#          "D:\Gowin_V1.9\Gowin\Gowin_V1.9.12.02_SP2_x64\IDE\bin\gw_sh.exe" flow_nogao.tcl
+#
+#   涓轰粈涔堝繀椤婚噸瀹氬悜 HOME锛?#     Gowin 浼氬湪 %HOME% 涓嬪啓涓存椂鏂囦欢涓?license 缂撳瓨锛涜嫢 HOME 鎸囧悜鍚腑鏂囩殑
+#     鐢ㄦ埛鐩綍锛岀患鍚堣繃绋嬩細鍥犺矾寰勪贡鐮佸寲鑰屽け璐ャ€傚畼鏂规墜鍐屼篃鏄庣‘瑕佹眰
+#     "宸ョ▼涓嶈鏀惧湪涓枃鐩綍"銆?#
+#   鈽?鏈剼鏈繀椤绘斁鍦ㄣ€愬伐绋嬫牴鐩綍銆戞墽琛?鈥斺€?閲岄潰鐨?src/... 鏄浉瀵硅矾寰勶紝
+#     鏀惧埌 tools\ 瀛愮洰褰曢噷鎵ц浼氬叏閮ㄦ姤 EX5998 (Cannot open Verilog file)銆?# =============================================================================
+
+puts "===== Balance_Ctrl 缁煎悎娴佺▼寮€濮嬶紙鏃?GAO锛?===="
+
+set_device -name GW2A-55C -device_version C GW2A-LV55PG484C8/I7
+set_option -top_module pendulum_top
+set_option -output_base_name Balance_Ctrl
+
+# 鈽呪槄 蹇呴』寮€鍚€孶se SSPI as regular IO銆嶁槄鈽?#   鏈璁＄敤 T20 浣滀负 key_sw[3]锛圫W4锛夛紝T20 鏄?SSPI 澶嶇敤鑴氥€?#   涓嶅紑鍚細鎶ワ細PR2028锛堢害鏉熶綅缃湪璇ュ皝瑁呬笉鍙敤锛? PR2017锛堜笓鐢ㄨ剼锛?#   骞朵互闈為浂鐮侀€€鍑猴紝涓嶇敓鎴愪綅娴併€?set_option -use_sspi_as_gpio 1
+
+# ---------------------------------------------------------------------------
+# 婧愭枃浠讹紙RTL锛?# ---------------------------------------------------------------------------
+add_file src/clk_mgr.v
+add_file src/key_filter.v
+add_file src/qep_encoder.v
+add_file src/motor_drv.v
+add_file src/angle_adc.v
+add_file src/limit_prot.v
+add_file src/ang_deriv.v
+add_file src/traj_ramp.v
+add_file src/pos_ctrl.v
+add_file src/pos_pd.v
+add_file src/pos_cmd.v
+add_file src/ctrl_fsm.v
+add_file src/swing_pump.v
+add_file src/pid_pipeline.v
+add_file src/uart_tx.v
+add_file src/uart_rx.v
+add_file src/uart_link.v
+add_file src/pid_tuner.v
+add_file src/uart_text.v
+add_file src/uart_text6.v
+add_file src/pendulum_top.v
+
+# ---------------------------------------------------------------------------
+# 绾︽潫鏂囦欢
+# ---------------------------------------------------------------------------
+add_file src/Balance_Ctrl.cst
+add_file src/Balance_Ctrl.sdc
+
+# ---------------------------------------------------------------------------
+# 鈽?涓?tools/flow.tcl 鐨勫敮涓€宸紓锛氫笅闈㈣繖琛岃娉ㄩ噴鎺変簡
+# ---------------------------------------------------------------------------
+# add_file src/Balance_Ctrl.rao
+
+run all
+
+puts "===== Balance_Ctrl 缁煎悎娴佺▼缁撴潫锛堟棤 GAO锛?===="
+puts "浜х墿锛歩mpl\\pnr\\Balance_Ctrl.fs"

@@ -1,0 +1,84 @@
+# =============================================================================
+# 鏂囦欢鍚?: flow.tcl
+# 椤圭洰   : J280 鏃嬭浆鍊掔珛鎽?FPGA 鎺у埗绯荤粺
+# 鍣ㄤ欢   : GW2A-LV55PG484C8/I7  (GW2A-55C)
+# 宸ュ叿   : Gowin 浜戞簮杞欢 V1.9.12.x  鈫? gw_sh.exe flow.tcl
+# -----------------------------------------------------------------------------
+# 鐢ㄦ硶锛堚槄 蹇呴』閬靛畧锛屽惁鍒欎細鍥犱腑鏂囪矾寰勫け璐ワ級
+#
+#   1) 鎶婃暣涓?Balance_Ctrl 鐩綍鏀惧埌**绾嫳鏂囪矾寰?*涓嬶紝渚嬪 C:\J280_work\Balance_Ctrl
+#   2) 鍦?cmd 閲屾墽琛岋細
+#        set HOME=C:\J280_work
+#        "D:\Gowin_V1.9\Gowin\Gowin_V1.9.12.02_SP2_x64\IDE\bin\gw_sh.exe" flow.tcl
+#
+#   涓轰粈涔堝繀椤婚噸瀹氬悜 HOME锛?#     Gowin 浼氬湪 %HOME% 涓嬪啓涓存椂鏂囦欢涓?license 缂撳瓨锛涜嫢 HOME 鎸囧悜鍚腑鏂囩殑
+#     鐢ㄦ埛鐩綍锛堟湰鏈轰负 C:\Users\涓€鍏冿級锛岀患鍚堣繃绋嬩細鍥犺矾寰勪贡鐮佸寲鑰屽け璐ャ€?#     瀹樻柟鎵嬪唽涔熸槑纭姹?宸ョ▼涓嶈鏀惧湪涓枃鐩綍"锛堜笂鎵嬫墜鍐?Step2 鍘熻瘽锛夈€?#
+#   鈽?鍏充簬 SSPI锛?#     鏈璁′娇鐢ㄤ簡 T20 浣滀负 key_sw[3]锛圫W4锛夈€俆20 鏄?SSPI 澶嶇敤鑴氥€?#     鍦?**GUI** 閲屽繀椤诲湪 Project 鈫?Configuration 鈫?Place & Route 鍕鹃€?#     "Use SSPI as regular IO"锛屽惁鍒欏伐鍏蜂細鎶?T20 鎸綔 SSPI锛孲W4 澶辨晥銆?#     鐢ㄦ湰鑴氭湰锛堝懡浠よ gw_sh锛夋椂璇ラ€夐」鐢变笅闈㈢殑 set_option 鏄惧紡鎸囧畾銆?# =============================================================================
+
+puts "===== Balance_Ctrl 缁煎悎娴佺▼寮€濮?====="
+
+# ---------------------------------------------------------------------------
+# 鍣ㄤ欢涓庨《灞?# 鈽?set_device 蹇呴』鍚屾椂缁欏嚭銆屽櫒浠跺悕銆嶅拰銆宲art number銆嶏細
+#   鏈満瀹炴祴鑻ュ彧鍐?GW2A-LV55PG484C8/I7锛屼細鎶?#     "there are more than one device named GW2A-LV55PG484C8/I7,
+#      please specify its name as well"
+#   鍥犱负鍚屼竴 part number 涓嬫湁澶氫釜 device name锛堥€熷害绛夌骇/鐗堟湰涓嶅悓锛夈€?#   姝ｇ‘鍐欐硶鏉ヨ嚜瀹樻柟渚嬬▼鐨?.gprj锛?#     <Device name="GW2A-55C" pn="GW2A-LV55PG484C8/I7">gw2a55c-005</Device>
+# ---------------------------------------------------------------------------
+set_device -name GW2A-55C -device_version C GW2A-LV55PG484C8/I7
+set_option -top_module pendulum_top
+
+# ---------------------------------------------------------------------------
+# 杈撳嚭鍚?# ---------------------------------------------------------------------------
+set_option -output_base_name Balance_Ctrl
+
+# ---------------------------------------------------------------------------
+# 鈽呪槄 蹇呴』寮€鍚€孶se SSPI as regular IO銆嶁槄鈽?#   鏈満瀹炴祴锛?*鍛戒护琛?gw_sh 鍚屾牱闇€瑕?*锛屽惁鍒欏竷灞€甯冪嚎闃舵鐩存帴鎶ラ敊锛?#       ERROR (PR2028) : The constrained location is useless in current package
+#       ERROR (PR2017) : 'key_sw[3]' cannot be placed according to constraint,
+#                        for the location is a dedicated pin (SSPI)
+#   骞朵笖 run all 浠ラ潪闆剁爜閫€鍑恒€佷笉鐢熸垚浣嶆祦銆?#   娉ㄦ剰锛氳禌棰樿祫鏂欎腑銆岀敤鍛戒护琛?gw_sh 鏃犳闂銆嶇殑璇存硶鍦ㄦ湰鏈?**涓嶆垚绔?*锛?#         宸插疄娴嬪鐜帮紝鏁呮澶勫繀椤绘樉寮忔墦寮€銆?#   锛堝畼鏂逛緥绋嬬殑 impl/*_process_config.json 閲屼篃纭疄鏄?"SSPI": true銆傦級
+# ---------------------------------------------------------------------------
+set_option -use_sspi_as_gpio 1
+
+# ---------------------------------------------------------------------------
+# 婧愭枃浠讹紙RTL锛?# ---------------------------------------------------------------------------
+add_file src/clk_mgr.v
+add_file src/key_filter.v
+add_file src/qep_encoder.v
+add_file src/motor_drv.v
+add_file src/angle_adc.v
+add_file src/limit_prot.v
+add_file src/ang_deriv.v
+add_file src/traj_ramp.v
+add_file src/pos_ctrl.v
+add_file src/pos_pd.v
+add_file src/pos_cmd.v
+add_file src/ctrl_fsm.v
+add_file src/swing_pump.v
+add_file src/pid_pipeline.v
+add_file src/uart_tx.v
+add_file src/uart_rx.v
+add_file src/uart_link.v
+add_file src/pid_tuner.v
+add_file src/uart_text.v
+add_file src/uart_text6.v
+add_file src/pendulum_top.v
+
+# ---------------------------------------------------------------------------
+# 绾︽潫鏂囦欢
+# ---------------------------------------------------------------------------
+add_file src/Balance_Ctrl.cst
+add_file src/Balance_Ctrl.sdc
+
+# ---------------------------------------------------------------------------
+# 鈽?GAO 鍦ㄧ嚎閫昏緫鍒嗘瀽浠厤缃紙.rao锛?#   鍔犱簡杩欎竴琛岋紝浜у嚭鐨勪綅娴佷細銆愬寘鍚?GAO 鏍搞€戯紝鍙厤鍚?GAO Analyzer 鎶撳唴閮ㄦ尝褰€?#   娉ㄦ剰锛氬惈 GAO 鏍告椂锛屾渶缁堜綅娴佸悕浼氬彉鎴?impl/pnr/ao_0.fs锛堜笉鏄?Balance_Ctrl.fs锛夛紝
+#         浣撶Н涔熶粠绾?11MB 娑ㄥ埌绾?18MB銆?#   涓嶉渶瑕?GAO 璋冭瘯鏃讹紝鎶婅繖涓€琛屾敞閲婃帀鍐嶇紪璇戯紝灏卞洖鍒版櫘閫氫綅娴併€?# ---------------------------------------------------------------------------
+add_file src/Balance_Ctrl.rao
+
+# ---------------------------------------------------------------------------
+# 鍏ㄦ祦绋嬶細缁煎悎 鈫?甯冨眬甯冪嚎 鈫?鐢熸垚浣嶆祦
+# ---------------------------------------------------------------------------
+run all
+
+puts "===== Balance_Ctrl 缁煎悎娴佺▼缁撴潫 ====="
+puts "浜х墿锛歩mpl\\pnr\\Balance_Ctrl.fs  锛堝彲鐩存帴鐢?Programmer 涓嬭浇鍒?SRAM锛?
+puts "鎶ュ憡锛歩mpl\\gwsynthesis\\*_syn_resource.html  锛堣祫婧愬崰鐢級"
+puts "      impl\\pnr\\Balance_Ctrl.rpt.txt          锛堝竷灞€甯冪嚎 + 鏃跺簭锛?

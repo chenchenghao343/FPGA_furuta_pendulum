@@ -1,0 +1,313 @@
+//=============================================================================
+// 文件名  : Balance_Ctrl.cst
+// 项目    : J280 旋转倒立摆 FPGA 控制系统
+// 器件    : GW2A-LV55PG484C8/I7  (GW2A-55, Device Version C)
+// 工具    : Gowin V1.9.12.x
+//-----------------------------------------------------------------------------
+// 引脚来源（三方交叉核实，全部有证据）：
+//   ① 官方 Interface_test\src\AD_test.cst          —— clk/rst/按键/串口/ADC/编码器A
+//   ② 官方 key_led\src\key_led.cst                 —— 4 个 LED
+//   ③ Balance_Ctrl_20260618.pdf 原理图网表          —— PWMA/AN1/AN2/PWMB/BN1/BN2/enc2
+//      证据：网表 B4_84B_Y18(PWMA) B4_72B_Y17(AN1) B4_84A_Y19(AN2)
+//            B4_68A_V14(PWMB) B4_68B_V15(BN2) B4_72A_AA17(BN1)
+//            B4_89B_Y20(enc_a) B4_89A_AA20(enc_b)
+//            B4_87B_W18(2A/XH2-A) B4_87A_W17(2B/XH2-B)
+//-----------------------------------------------------------------------------
+// ★★ 编译前必做：GUI 里 Project → Configuration → Place & Route
+//    勾选 "Use SSPI as regular IO"，
+//    否则 T20(key_sw[3] / SW4) 会被工具挪作 SSPI 脚，SW4 失效。
+//    （用命令行 gw_sh flow.tcl 无此问题。）
+//-----------------------------------------------------------------------------
+// ★★ 电机 / 编码器用了哪些引脚（2026-10-04 整理，只陈述可核实的事实）
+//    【本设计实际使用的引脚】—— 由顶层 pendulum_top.v 的实例连接确定：
+//        电机   ：PWMA / AN1 / AN2     （Y18 / Y17 / Y19，TB6612 的 A 路）
+//        编码器 ：enc2_a / enc2_b      （W18 / W17）
+//    【未使用的引脚】：
+//        enc_a / enc_b（Y20 / AA20）、PWMB / BN1 / BN2（顶层恒置停机电平）
+//    ★ 本文件下方按"信号组"分区，但两条分区标题历史上曾被写成
+//      "XH1 / XH2"并且与本工程其它地方的命名互相矛盾（顶层第 7 节称
+//      "电机 A 路 + 编码器 2 = XH2"，而本文件旧标题把 PWMA/AN1/AN2 归到 XH1）。
+//      引脚本身没有问题，矛盾的只是【连接器该叫什么】这个文字标签。
+//      无法从代码核实底板丝印，故此处只按"信号属于哪一组"分区，不下命名结论。
+//      引脚约束全部保留，改接另一组只需改顶层实例连接。
+//-----------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------
+// 时钟与复位
+//---------------------------------------------------------------------------
+IO_LOC  "clk_50m" M19;
+IO_PORT "clk_50m" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
+
+IO_LOC  "rst_n" AB3;
+IO_PORT "rst_n" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
+
+//---------------------------------------------------------------------------
+// 按键 key_sw[3:0]  SW1..SW4  （BANK3, 1.5V, 低有效, 内部上拉）
+//   SW1 T18 运行/停止        SW2 R18 ★v6.3 已停用（v6.0~v6.2 为定点 +一圈）
+//   SW3 U20 ★v6.3 已停用     SW4 T20 定点归零   ← SSPI 复用脚
+//     （v6.0~v6.2 期间 SW3 为定点 -一圈）
+//   ★ 旧注释曾写"SW2 记直立参考 / SW3 记下垂参考 / SW4 遥测开关"，
+//     那是 v5.x 的行为。v6.0 起：
+//       记参考只能用串口 'U'/'D'；遥测开关只能用串口 'S'。
+//---------------------------------------------------------------------------
+IO_LOC  "key_sw[0]" T18;
+IO_PORT "key_sw[0]" IO_TYPE=LVCMOS15 PULL_MODE=UP BANK_VCCIO=1.5;
+
+IO_LOC  "key_sw[1]" R18;
+IO_PORT "key_sw[1]" IO_TYPE=LVCMOS15 PULL_MODE=UP BANK_VCCIO=1.5;
+
+// 核心板 SW3 / SW4（BANK3 = 1.5V）。本设计不使用，但端口存在，
+// 引脚照 full 版约束，保证与 full 的引脚表逐条一致。
+IO_LOC  "key_sw[2]" U20;
+IO_PORT "key_sw[2]" IO_TYPE=LVCMOS15 PULL_MODE=UP BANK_VCCIO=1.5;
+
+IO_LOC  "key_sw[3]" T20;
+IO_PORT "key_sw[3]" IO_TYPE=LVCMOS15 PULL_MODE=UP BANK_VCCIO=1.5;
+
+
+
+//---------------------------------------------------------------------------
+// LED led[3:0]（BANK 1.5V, 【高电平点亮】）
+//   ★ 原注释写「低电平点亮」是错的，导致早期版本 LED 逻辑整体反相。
+//     依据一：官方 15_key_led 例程以 led<=4'b1000 一次点亮一个灯（写1点亮）；
+//     依据二：上板实测按 R 进入运行后 D2 熄灭，与「高电平点亮+取反」吻合。
+//     v2.6 已把顶层 LED 赋值改回不取反。
+//   LED1 U18 心跳  LED2 U19 运行中  LED3 U17 已平衡  LED4 T17 告警
+//---------------------------------------------------------------------------
+IO_LOC  "led[0]" U18;
+IO_PORT "led[0]" IO_TYPE=LVCMOS15 PULL_MODE=UP DRIVE=8 BANK_VCCIO=1.5;
+
+IO_LOC  "led[1]" U19;
+IO_PORT "led[1]" IO_TYPE=LVCMOS15 PULL_MODE=UP DRIVE=8 BANK_VCCIO=1.5;
+
+IO_LOC  "led[2]" U17;
+IO_PORT "led[2]" IO_TYPE=LVCMOS15 PULL_MODE=UP DRIVE=8 BANK_VCCIO=1.5;
+
+IO_LOC  "led[3]" T17;
+IO_PORT "led[3]" IO_TYPE=LVCMOS15 PULL_MODE=UP DRIVE=8 BANK_VCCIO=1.5;
+
+//---------------------------------------------------------------------------
+// 串口 9600 8N1（BANK 3.3V）
+//   ★ 厂商手册里 TXD/RXD 的命名方向与官方 .cst 相反，以 .cst 为准：
+//     uart_tx = FPGA 输出(K20)，uart_rx = FPGA 输入(L20)
+//---------------------------------------------------------------------------
+IO_LOC  "uart_tx" K20;
+IO_PORT "uart_tx" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=8 BANK_VCCIO=3.3;
+
+IO_LOC  "uart_rx" L20;
+IO_PORT "uart_rx" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
+
+//---------------------------------------------------------------------------
+// ADC 3PA1030（BANK 3.3V）
+//   adc_clk = 25MHz 输出；adc_oe_n 低有效输出使能；adc_data_in[9:0] 并行数据
+//   ★ 官方例程另有 adc_stby_n 输出，但官方 .cst 中并无此信号约束，
+//     说明该脚在底板上已由硬件处理。本设计不引出该信号，避免工具随机分配引脚。
+//---------------------------------------------------------------------------
+IO_LOC  "adc_clk" G18;
+IO_PORT "adc_clk" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=8 BANK_VCCIO=3.3;
+
+IO_LOC  "adc_oe_n" H20;
+IO_PORT "adc_oe_n" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=8 BANK_VCCIO=3.3;
+
+IO_LOC  "adc_data_in[9]" E19;
+IO_PORT "adc_data_in[9]" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
+IO_LOC  "adc_data_in[8]" G17;
+IO_PORT "adc_data_in[8]" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
+IO_LOC  "adc_data_in[7]" G19;
+IO_PORT "adc_data_in[7]" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
+IO_LOC  "adc_data_in[6]" H19;
+IO_PORT "adc_data_in[6]" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
+IO_LOC  "adc_data_in[5]" H18;
+IO_PORT "adc_data_in[5]" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
+IO_LOC  "adc_data_in[4]" D19;
+IO_PORT "adc_data_in[4]" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
+IO_LOC  "adc_data_in[3]" J19;
+IO_PORT "adc_data_in[3]" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
+IO_LOC  "adc_data_in[2]" J20;
+IO_PORT "adc_data_in[2]" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
+IO_LOC  "adc_data_in[1]" M21;
+IO_PORT "adc_data_in[1]" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
+IO_LOC  "adc_data_in[0]" L21;
+IO_PORT "adc_data_in[0]" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
+
+//---------------------------------------------------------------------------
+// 信号组 1：编码器 1（enc_a/enc_b）+ TB6612 的 A 路（PWMA/AN1/AN2）
+//   ★ 本设计用到本组里的 PWMA/AN1/AN2 三个输出（电机走 A 路）；
+//     enc_a/enc_b 未使用（顶层接的是信号组 2 的 enc2_a/enc2_b）。
+//   编码器 A/B 相为输入；PWMA/AN1/AN2 输出到 TB6612FNG
+//---------------------------------------------------------------------------
+
+
+IO_LOC  "PWMA" Y18;
+IO_PORT "PWMA" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=4 BANK_VCCIO=3.3;
+
+IO_LOC  "AN1" Y17;
+IO_PORT "AN1" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=8 BANK_VCCIO=3.3;
+
+IO_LOC  "AN2" Y19;
+IO_PORT "AN2" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=8 BANK_VCCIO=3.3;
+
+//---------------------------------------------------------------------------
+// 信号组 2：编码器 2（enc2_a/enc2_b）+ TB6612 的 B 路（PWMB/BN1/BN2）
+//   ★ 本设计用到本组里的 enc2_a/enc2_b 两个输入（编码器读这一路）；
+//     PWMB/BN1/BN2 由顶层恒置停机电平，未使用。
+//   ★ 旧标题写"预留，本版本不驱动"，与事实相反 —— 编码器正是读这一路。
+//---------------------------------------------------------------------------
+IO_LOC  "enc2_a" W18;
+IO_PORT "enc2_a" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
+
+IO_LOC  "enc2_b" W17;
+IO_PORT "enc2_b" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
+
+// XH1 组编码器（BANK4 = 3.3V）。本设计不使用，引脚保留。
+IO_LOC  "enc_a" Y20;
+IO_PORT "enc_a" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
+
+IO_LOC  "enc_b" AA20;
+IO_PORT "enc_b" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
+
+IO_LOC  "PWMB" V14;
+IO_PORT "PWMB" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=4 BANK_VCCIO=3.3;
+
+IO_LOC  "BN1" AA17;
+IO_PORT "BN1" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=8 BANK_VCCIO=3.3;
+
+IO_LOC  "BN2" V15;
+IO_PORT "BN2" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=8 BANK_VCCIO=3.3;
+
+//---------------------------------------------------------------------------
+// ★★★ v6.7 复审：改用【底板上自带的 6 键 + 4PIN OLED 座】
+//     v6.6 的 J2 飞线方案作废（球号 W12/W13/W14/W15/Y14/Y16/W16 全部释放）
+//-----------------------------------------------------------------------------
+// 【为什么换】
+//   v6.6 选的是 J2 排针上的 W12..Y14 / Y16 / W16：要 7 根飞线，还得自己焊 OLED 座。
+//   底板（Balance_Ctrl）已经把这 8 个网络引到一个【连续的偶数针区块】：
+//     H2 的第 20/22/24/26/28/30 针 = 板上 SW6/SW5/SW4/SW3/SW2/SW1
+//     H2 的第 32/34 针            = 4PIN OLED 座 H1 的 pin2(3V3 侧)/pin1
+//   直接吃板上自带资源：零飞线、零焊接、接线不用找针。
+//
+// 【引脚表】
+//   功能            信号        球号  原理图网络名    bank    H2针号  实物
+//   启动/停止       ext_key[0]  V16   B4_86A_V16      BANK4   30      SW1
+//   +100            ext_key[1]  U16   B4_86B_U16      BANK4   28      SW2
+//   -100            ext_key[2]  Y12   B4_51A_Y12      BANK4   26      SW3
+//   模式 M          ext_key[3]  Y13   B4_51B_Y13      BANK4   24      SW4
+//   输入 !          ext_key[4]  L22   B2_33B_L22      BANK2   22      SW5
+//   复位            ext_rst_key K22   B2_33A_K22      BANK2   20      SW6
+//   OLED SCL        oled_scl    V17   B4_90A_V17      BANK4   34      H1 pin1
+//   OLED SDA        oled_sda    V18   B4_90B_V18      BANK4   32      H1 pin2
+//   OLED 电源/地      —          —     3V3 / GND       —       —       H1 pin3/4
+//
+//   ★ 上面的 H2 针号用的是**主控板原理图**（Balance_Ctrl_20260618.pdf）那套编号。
+//     底板上母座的编号是另一套，同一个网络对应关系：底板 k ↔ 主控板 (82-2k)。
+//     例：V16 = 主控板 30 = 底板 26；V17 = 主控板 34 = 底板 24。
+//     接线认球号/网络名最稳，别只认针号。底板那套针号见
+//     文档\OLED与外部按键接线表_v6.7.txt。
+//
+//   ★ 球号不是猜的：原理图网络名自带 bank + 差分对 + 球号，
+//     例如 B4_86A_V16 = BANK4 / 差分对 86A / 球 V16。
+//     已在 Balance_Ctrl_20260618.pdf 的文字层里逐条命中 8 条：
+//       B4_86A_V16  B4_86B_U16  B4_51A_Y12  B4_51B_Y13
+//       B2_33B_L22  B2_33A_K22  B4_90A_V17  B4_90B_V18
+//     这 8 条网络在原理图里是**从 FPGA 球直接连到 H2**（中间没有串联电阻、
+//     没有 0Ω/DNP 跳件，网络名两侧一致）。
+//
+// 【BANK4 / BANK2 到底是几伏 —— 这次有原理图证据，不再靠反证】
+//   核心板 coreboard_20230817.pdf 的 FPGA 供电页把 VCCO 分组接成：
+//     VCCO0 ← VCCB0 ← J7 (2×2 跳线：+1.2V / +2.5V)
+//     VCCO1 ← VCCB1 ← J8 (2×2 跳线：+3.3V / +2.5V)
+//     VCCO2 ← VCCB2 ← FB6 ← +3.3V               ← BANK2，**固定 3.3V，无跳线**
+//     VCCO3 ← VCCB3 ← FB8 ← +1.5V               ← 核心板 SW1..SW4 / LED 在这一组
+//     VCCO4 ← VCCB4 ← J9 (2×2 跳线：+3.3V / +2.5V)   ← BANK4，**必须确认跳线**
+//     VCCO5 ← VCCB5 ← FB10 ← +3.3V
+//     VCCO6 / VCCO7 ← VDDR1V5 (DDR3 1.5V)
+//   ⇒ BANK2 = 3.3V，证据链完整：+3.3V → FB6 → VCCB2 → VCCO2。
+//   ⇒ BANK4 = 3.3V 还是 2.5V，**取决于核心板上那颗 2×2 跳线 J9**（在 FB9 左边）。
+//      ⚠ 上电前请目视确认：J9 的 pin3 = +3.3V、pin4 = +2.5V，要求短接 1-3。
+//        若停在 2.5V 档：OLED 模块板载 4.7k 上拉到 3V3，引脚会长期吃 3.3V，
+//        超出 2.5V bank 的输入耐压（这是会真坏片子的）。
+//        按键则无所谓 —— 按键只把引脚短到 GND，引脚电压永远不超过自身 VCCIO，
+//        所以在任何 bank 电压下都安全；只有 OLED 对 bank 电压敏感。
+//      ⚠ 这一条是**本轮唯一无法在软件里验证的硬件前提**。
+//
+// 【6 个键怎么分配 —— 6 个全用上了】
+//   SW1..SW5 = 启动 / +100 / -100 / 模式M / 输入!（走 ext_keys，1 拍脉冲）
+//   SW6      = 复位（走 key_filter -> clk_mgr.ext_rst_n，是【电平】不是脉冲）
+//   ★ 两个复位源并联，互不替代：
+//       板载 SW5 (AB3 -> rst_n)  +  板上 SW6 (K22 -> ext_rst_key)
+//     在 clk_mgr 内部先与再进异步清零端：
+//       按下立刻复位（异步置位）+ 松开走满 8 拍才释放（同步释放）。
+//   ★ 复位语义 = 真复位：增益回到 pid_tuner 的初值、状态机回 IDLE、
+//     位置指令清零、OLED 重新初始化。手调过的增益会被清掉，
+//     这一点与按板载复位键完全相同。
+//   ★ 复位键消抖 20ms：短于 20ms 的毛刺不会复位（sim\tb_rst_key.v 的 R2 验证）。
+//
+// 【按键上拉为什么一直开着】
+//   原理图里 6 个按键都是「一端接网络、一端接 GND」，**板上没有任何外部上拉电阻**
+//   （KH-6X6X5H-STM 4 脚封装，3/4 内部短接、1/2 内部短接）。
+//   所以必须靠 FPGA 内部上拉给出高电平，否则未按下时引脚悬空、读数随机。
+//
+// 【OLED 为什么也开 PULL_MODE=UP】
+//   模块板上一般自带 4.7k 上拉。内部这颗弱上拉并联上去只多几十 uA 静态电流，
+//   对上升沿没有实质影响；万一模块没焊上拉，它还能兜底。开比关安全。
+//   注意：开漏的"输出高"在 RTL 里是 z（高阻），不是 1 —— 见 pendulum_top.v 的 assign。
+//
+// 【核实程度 —— 别当成都已实测】
+//   ✔ 已核实：8 个球号 ↔ 原理图网络名一一对应（PDF 文字层）；
+//            8 个球号在本 .cst 里此前全部空闲（脚本比对了全部 41 条 IO_LOC）；
+//            BANK2/BANK4 的供电来源（核心板原理图 VCCO 供电页）。
+//   ✘ 未核实：板子丝印与原理图是否一致；J9 跳线的实际档位；
+//            OLED 座 H1 在实物上是不是 pin1=V17 / pin2=V18 的顺序
+//            （原理图这么画，但没有照片或通断测量佐证）。
+//            ⇒ 第一次上板建议用万用表通断档量三下：
+//              H1 pin3 ↔ 3V3、H1 pin4 ↔ GND、H1 pin1/pin2 ↔ H2 的 34/32 针。
+//
+//   ★ 关于 OLED 座的针序：H1 是 V17 / V18 / 3V3 / GND。
+//     常见 0.96" 模块的针序多为 GND / VCC / SCL / SDA，**不要直插**，
+//     请按模块自身的丝印用 4 根杜邦线接：
+//       模块 VCC → H1 pin3      模块 GND → H1 pin4
+//       模块 SCL → H1 pin1(默认) 模块 SDA → H1 pin2(默认)
+//     若屏没反应，先把 SCL/SDA 两根线对调试一次
+//     （等价于把下面 oled_scl / oled_sda 两行的球号 V17/V18 互换后重编）。
+//---------------------------------------------------------------------------
+
+
+
+
+
+// 板上 SW6 = 复位键（K22，BANK2 固定 3.3V）。低有效，靠内部上拉给出高电平。
+IO_LOC  "ext_rst_key" K22;
+IO_PORT "ext_rst_key" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
+
+//---------------------------------------------------------------------------
+// ★ v7.2（方案 A）：底板 5 个命令键接回来 —— 位置指令（OLED 的 SET/PEND）
+//   需要它们。球号与 full 版完全相同，都是 v6.7 起核对过的：
+//     ext_key[0] V16  B4_86A_V16  BANK4  SW1 启动/停止
+//     ext_key[1] U16  B4_86B_U16  BANK4  SW2 +100
+//     ext_key[2] Y12  B4_51A_Y12  BANK4  SW3 -100
+//     ext_key[3] Y13  B4_51B_Y13  BANK4  SW4 模式 M
+//     ext_key[4] L22  B2_33B_L22  BANK2  SW5 输入 !
+//   全部低有效（另一端接 GND，板上没有外部上拉 -> 必须 PULL_MODE=UP），
+//   消抖 20ms 在 ext_keys 里做。
+//---------------------------------------------------------------------------
+IO_LOC  "ext_key[0]" V16;
+IO_PORT "ext_key[0]" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
+
+IO_LOC  "ext_key[1]" U16;
+IO_PORT "ext_key[1]" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
+
+IO_LOC  "ext_key[2]" Y12;
+IO_PORT "ext_key[2]" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
+
+IO_LOC  "ext_key[3]" Y13;
+IO_PORT "ext_key[3]" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
+
+IO_LOC  "ext_key[4]" L22;
+IO_PORT "ext_key[4]" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
+
+IO_LOC  "oled_scl" V17;
+IO_PORT "oled_scl" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=8 BANK_VCCIO=3.3;
+
+// ★ oled_sda 是双向（inout）：从机要拉低应答，FPGA 要读回 ACK。
+IO_LOC  "oled_sda" V18;
+IO_PORT "oled_sda" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=8 BANK_VCCIO=3.3;

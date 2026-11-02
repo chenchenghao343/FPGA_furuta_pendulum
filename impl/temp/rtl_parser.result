@@ -1,0 +1,258 @@
+[
+ {
+  "InstFile" : "E:/J280_v7.4_work/src/pendulum_top.v",
+  "InstLine" : 14,
+  "InstName" : "pendulum_top",
+  "ModuleFile" : "E:/J280_v7.4_work/src/pendulum_top.v",
+  "ModuleLine" : 14,
+  "ModuleName" : "pendulum_top",
+  "SubInsts" : [
+   {
+    "InstFile" : "E:/J280_v7.4_work/src/pendulum_top.v",
+    "InstLine" : 75,
+    "InstName" : "u_rst_key",
+    "ModuleFile" : "E:/J280_v7.4_work/src/key_filter.v",
+    "ModuleLine" : 13,
+    "ModuleName" : "key_filter"
+   },
+   {
+    "InstFile" : "E:/J280_v7.4_work/src/pendulum_top.v",
+    "InstLine" : 85,
+    "InstName" : "u_clk_mgr",
+    "ModuleFile" : "E:/J280_v7.4_work/src/clk_mgr.v",
+    "ModuleLine" : 14,
+    "ModuleName" : "clk_mgr"
+   },
+   {
+    "InstFile" : "E:/J280_v7.4_work/src/pendulum_top.v",
+    "InstLine" : 98,
+    "InstName" : "u_key_run",
+    "ModuleFile" : "E:/J280_v7.4_work/src/key_filter.v",
+    "ModuleLine" : 13,
+    "ModuleName" : "key_filter"
+   },
+   {
+    "InstFile" : "E:/J280_v7.4_work/src/pendulum_top.v",
+    "InstLine" : 110,
+    "InstName" : "u_key_sine",
+    "ModuleFile" : "E:/J280_v7.4_work/src/key_filter.v",
+    "ModuleLine" : 13,
+    "ModuleName" : "key_filter"
+   },
+   {
+    "InstFile" : "E:/J280_v7.4_work/src/pendulum_top.v",
+    "InstLine" : 132,
+    "InstName" : "u_angle_adc",
+    "ModuleFile" : "E:/J280_v7.4_work/src/angle_adc.v",
+    "ModuleLine" : 14,
+    "ModuleName" : "angle_adc"
+   },
+   {
+    "InstFile" : "E:/J280_v7.4_work/src/pendulum_top.v",
+    "InstLine" : 153,
+    "InstName" : "u_qep_encoder",
+    "ModuleFile" : "E:/J280_v7.4_work/src/qep_encoder.v",
+    "ModuleLine" : 13,
+    "ModuleName" : "qep_encoder"
+   },
+   {
+    "InstFile" : "E:/J280_v7.4_work/src/pendulum_top.v",
+    "InstLine" : 259,
+    "InstName" : "u_ext_keys",
+    "ModuleFile" : "E:/J280_v7.4_work/src/ext_keys.v",
+    "ModuleLine" : 14,
+    "ModuleName" : "ext_keys",
+    "SubInsts" : [
+     {
+      "InstFile" : "E:/J280_v7.4_work/src/ext_keys.v",
+      "InstLine" : 40,
+      "InstName" : "u_k_run",
+      "ModuleFile" : "E:/J280_v7.4_work/src/key_filter.v",
+      "ModuleLine" : 13,
+      "ModuleName" : "key_filter"
+     },
+     {
+      "InstFile" : "E:/J280_v7.4_work/src/ext_keys.v",
+      "InstLine" : 45,
+      "InstName" : "u_k_inc",
+      "ModuleFile" : "E:/J280_v7.4_work/src/key_filter.v",
+      "ModuleLine" : 13,
+      "ModuleName" : "key_filter"
+     },
+     {
+      "InstFile" : "E:/J280_v7.4_work/src/ext_keys.v",
+      "InstLine" : 50,
+      "InstName" : "u_k_dec",
+      "ModuleFile" : "E:/J280_v7.4_work/src/key_filter.v",
+      "ModuleLine" : 13,
+      "ModuleName" : "key_filter"
+     },
+     {
+      "InstFile" : "E:/J280_v7.4_work/src/ext_keys.v",
+      "InstLine" : 55,
+      "InstName" : "u_k_mode",
+      "ModuleFile" : "E:/J280_v7.4_work/src/key_filter.v",
+      "ModuleLine" : 13,
+      "ModuleName" : "key_filter"
+     },
+     {
+      "InstFile" : "E:/J280_v7.4_work/src/ext_keys.v",
+      "InstLine" : 60,
+      "InstName" : "u_k_send",
+      "ModuleFile" : "E:/J280_v7.4_work/src/key_filter.v",
+      "ModuleLine" : 13,
+      "ModuleName" : "key_filter"
+     }
+    ]
+   },
+   {
+    "InstFile" : "E:/J280_v7.4_work/src/pendulum_top.v",
+    "InstLine" : 290,
+    "InstName" : "u_pid_tuner",
+    "ModuleFile" : "E:/J280_v7.4_work/src/pid_tuner.v",
+    "ModuleLine" : 28,
+    "ModuleName" : "pid_tuner"
+   },
+   {
+    "InstFile" : "E:/J280_v7.4_work/src/pendulum_top.v",
+    "InstLine" : 324,
+    "InstName" : "u_pos_cmd",
+    "ModuleFile" : "E:/J280_v7.4_work/src/pos_cmd.v",
+    "ModuleLine" : 14,
+    "ModuleName" : "pos_cmd"
+   },
+   {
+    "InstFile" : "E:/J280_v7.4_work/src/pendulum_top.v",
+    "InstLine" : 366,
+    "InstName" : "u_ang_deriv",
+    "ModuleFile" : "E:/J280_v7.4_work/src/ang_deriv.v",
+    "ModuleLine" : 14,
+    "ModuleName" : "ang_deriv"
+   },
+   {
+    "InstFile" : "E:/J280_v7.4_work/src/pendulum_top.v",
+    "InstLine" : 391,
+    "InstName" : "u_limit_prot",
+    "ModuleFile" : "E:/J280_v7.4_work/src/limit_prot.v",
+    "ModuleLine" : 13,
+    "ModuleName" : "limit_prot"
+   },
+   {
+    "InstFile" : "E:/J280_v7.4_work/src/pendulum_top.v",
+    "InstLine" : 412,
+    "InstName" : "u_ctrl_fsm",
+    "ModuleFile" : "E:/J280_v7.4_work/src/ctrl_fsm.v",
+    "ModuleLine" : 14,
+    "ModuleName" : "ctrl_fsm"
+   },
+   {
+    "InstFile" : "E:/J280_v7.4_work/src/pendulum_top.v",
+    "InstLine" : 440,
+    "InstName" : "u_traj_sine",
+    "ModuleFile" : "E:/J280_v7.4_work/src/traj_sine.v",
+    "ModuleLine" : 14,
+    "ModuleName" : "traj_sine"
+   },
+   {
+    "InstFile" : "E:/J280_v7.4_work/src/pendulum_top.v",
+    "InstLine" : 454,
+    "InstName" : "u_traj_ramp",
+    "ModuleFile" : "E:/J280_v7.4_work/src/traj_ramp.v",
+    "ModuleLine" : 14,
+    "ModuleName" : "traj_ramp"
+   },
+   {
+    "InstFile" : "E:/J280_v7.4_work/src/pendulum_top.v",
+    "InstLine" : 473,
+    "InstName" : "u_pos_ctrl",
+    "ModuleFile" : "E:/J280_v7.4_work/src/pos_ctrl.v",
+    "ModuleLine" : 13,
+    "ModuleName" : "pos_ctrl"
+   },
+   {
+    "InstFile" : "E:/J280_v7.4_work/src/pendulum_top.v",
+    "InstLine" : 513,
+    "InstName" : "u_pos_pd",
+    "ModuleFile" : "E:/J280_v7.4_work/src/pos_pd.v",
+    "ModuleLine" : 22,
+    "ModuleName" : "pos_pd"
+   },
+   {
+    "InstFile" : "E:/J280_v7.4_work/src/pendulum_top.v",
+    "InstLine" : 536,
+    "InstName" : "u_pid_pipeline",
+    "ModuleFile" : "E:/J280_v7.4_work/src/pid_pipeline.v",
+    "ModuleLine" : 13,
+    "ModuleName" : "pid_pipeline"
+   },
+   {
+    "InstFile" : "E:/J280_v7.4_work/src/pendulum_top.v",
+    "InstLine" : 578,
+    "InstName" : "u_swing_pump",
+    "ModuleFile" : "E:/J280_v7.4_work/src/swing_pump.v",
+    "ModuleLine" : 13,
+    "ModuleName" : "swing_pump"
+   },
+   {
+    "InstFile" : "E:/J280_v7.4_work/src/pendulum_top.v",
+    "InstLine" : 628,
+    "InstName" : "u_motor_drv",
+    "ModuleFile" : "E:/J280_v7.4_work/src/motor_drv.v",
+    "ModuleLine" : 13,
+    "ModuleName" : "motor_drv"
+   },
+   {
+    "InstFile" : "E:/J280_v7.4_work/src/pendulum_top.v",
+    "InstLine" : 711,
+    "InstName" : "u_uart_link",
+    "ModuleFile" : "E:/J280_v7.4_work/src/uart_link.v",
+    "ModuleLine" : 12,
+    "ModuleName" : "uart_link",
+    "SubInsts" : [
+     {
+      "InstFile" : "E:/J280_v7.4_work/src/uart_link.v",
+      "InstLine" : 58,
+      "InstName" : "u_uart_tx",
+      "ModuleFile" : "E:/J280_v7.4_work/src/uart_tx.v",
+      "ModuleLine" : 11,
+      "ModuleName" : "uart_tx"
+     },
+     {
+      "InstFile" : "E:/J280_v7.4_work/src/uart_link.v",
+      "InstLine" : 76,
+      "InstName" : "u_uart_rx",
+      "ModuleFile" : "E:/J280_v7.4_work/src/uart_rx.v",
+      "ModuleLine" : 13,
+      "ModuleName" : "uart_rx"
+     }
+    ]
+   },
+   {
+    "InstFile" : "E:/J280_v7.4_work/src/pendulum_top.v",
+    "InstLine" : 764,
+    "InstName" : "u_oled_disp",
+    "ModuleFile" : "E:/J280_v7.4_work/src/oled_disp.v",
+    "ModuleLine" : 43,
+    "ModuleName" : "oled_disp",
+    "SubInsts" : [
+     {
+      "InstFile" : "E:/J280_v7.4_work/src/oled_disp.v",
+      "InstLine" : 134,
+      "InstName" : "u_numfmt",
+      "ModuleFile" : "E:/J280_v7.4_work/src/numfmt.v",
+      "ModuleLine" : 12,
+      "ModuleName" : "numfmt"
+     }
+    ]
+   },
+   {
+    "InstFile" : "E:/J280_v7.4_work/src/pendulum_top.v",
+    "InstLine" : 783,
+    "InstName" : "u_oled",
+    "ModuleFile" : "E:/J280_v7.4_work/src/oled_ssd1306.v",
+    "ModuleLine" : 14,
+    "ModuleName" : "oled_ssd1306"
+   }
+  ]
+ }
+]
